@@ -25,6 +25,7 @@ def get_request_and_agent():
 if __name__ == "__main__":
     request, agent_name, extra_args = get_request_and_agent()
     # Dynamically import and call the custom agent/workflow
+    # import debugpy;debugpy.listen(("localhost", 5678));print("waiting for debugger attach ...");debugpy.wait_for_client()
     if agent_name == "coder_custom":
         from customs.coder_custom import modify_code
         workspace = extra_args.get("workspace", "./executions/test/")

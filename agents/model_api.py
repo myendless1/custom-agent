@@ -1,6 +1,7 @@
 import os
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 API_KEY = os.getenv("OPENAI_API_KEY")
+print("API_KEY:", API_KEY)
 model_info = {
     "name": "deepseek-chat", # 模型名称，可随意填写
     "parameters": {

@@ -20,12 +20,14 @@ def modify_code(workspace=None, request=None):
         if not os.path.exists(workspace):
             os.makedirs(workspace, exist_ok=True)
 
+        log_dir = 'ca_logs'
         planner_agent = PlannerAgent(
             name="planner",
             model_client=model_client,
             tools=[],
             reflect_on_tool_use=True,
             workspace=workspace,
+            log_dir=log_dir,
         )
         coder_agent = CoderAgent(
             name="coder",
@@ -33,16 +35,15 @@ def modify_code(workspace=None, request=None):
             tools=[],
             reflect_on_tool_use=True,
             workspace=workspace,
+            log_dir=log_dir,
         )
 
         mission_goal = str(request)
         logs = []
-        logs.append(await planner_agent.run(mission_goal, stream_output=False))
-        logs.append(await coder_agent.run(mission_goal, stream_output=False))
-        with open(os.path.join(workspace, 'logs.json'), 'w') as f:
+        logs.append(await planner_agent.run(mission_goal, stream_output=True))
+        logs.append(await coder_agent.run(mission_goal, stream_output=True))
+        with open(os.path.join(workspace, log_dir, 'logs.json'), 'w') as f:
             json.dump(logs, f, indent=4)
-        print(f"执行任务 '{mission_goal}' 完成，工作空间: {workspace}")
-        print(f"任务日志: {logs}")
         await model_client.close()
 
     asyncio.run(workflow())
